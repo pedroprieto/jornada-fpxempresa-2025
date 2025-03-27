@@ -190,6 +190,7 @@ jobs:
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
             --no-confirm-changeset
+            --debug
 
   integration-test:
     if: github.ref == 'refs/heads/master'
