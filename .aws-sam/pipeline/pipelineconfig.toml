@@ -1,0 +1,23 @@
+version = 0.1
+[default.pipeline_bootstrap.parameters]
+oidc_provider_url = "https://token.actions.githubusercontent.com"
+oidc_client_id = "sts.amazonaws.com"
+github_org = "pedroprieto"
+github_repo = "jornada-fpxempresa-2025"
+deployment_branch = "master"
+oidc_provider = "github-actions"
+permissions_provider = "OpenID Connect (OIDC)"
+
+[dev.pipeline_bootstrap.parameters]
+pipeline_execution_role = "arn:aws:iam::764255565061:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-V5jcioaPMjp7"
+cloudformation_execution_role = "arn:aws:iam::764255565061:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-vntKaDhYwi1H"
+artifacts_bucket = "aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-gjg2lqeotqle"
+image_repository = ""
+region = "eu-west-1"
+
+[prod.pipeline_bootstrap.parameters]
+pipeline_execution_role = "arn:aws:iam::764255565061:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-cEIYknzkhRC6"
+cloudformation_execution_role = "arn:aws:iam::764255565061:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-12HkXcatq39t"
+artifacts_bucket = "aws-sam-cli-managed-prod-pipeline--artifactsbucket-jnhevwmtc5yu"
+image_repository = ""
+region = "eu-west-1"
