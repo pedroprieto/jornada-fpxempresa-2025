@@ -205,7 +205,7 @@ jobs:
     runs-on: ubuntu-latest
     # Configure GitHub Action Environment to have a manual approval step before deployment to production
     # https://docs.github.com/en/actions/reference/environments
-    # environment: <configured-environment>
+    environment: testenv
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/setup-sam@v2
