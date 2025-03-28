@@ -21,8 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: |
-          # trigger the tests here
+      - name: Instalar dependencias
+        run: npm install
+      - name: Lanzar tests unitarios
+        run: npm run test
+      - name: Eliminar carpeta de tests para reducir tamaño
+        run: rm -rf ./__tests__
+      - name: Eliminar dependencias de desarrollo y dejar solo las de producción
+        run: npm prune --production
 
   build-and-package:
     needs: [test]
