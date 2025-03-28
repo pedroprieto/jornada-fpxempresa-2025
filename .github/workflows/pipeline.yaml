@@ -48,7 +48,7 @@ jobs:
         run: |
           sam package \
             --region ${TESTING_REGION} \
-            --output-template-file packaged-testing.yaml
+            --output-template-file packaged-testing.yaml \
             --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
       - uses: actions/upload-artifact@v4
@@ -68,7 +68,7 @@ jobs:
         run: |
           sam package \
             --region ${PROD_REGION} \
-            --output-template-file packaged-prod.yaml
+            --output-template-file packaged-prod.yaml \
             --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
       - uses: actions/upload-artifact@v4
