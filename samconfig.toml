@@ -33,9 +33,13 @@ warm_containers = "EAGER"
 [dev]
 [dev.deploy]
 [dev.deploy.parameters]
-StageName = "Dev"
+parameter_overrides = [
+    "StageName=Dev"
+]
 
 [prod]
 [prod.deploy]
 [prod.deploy.parameters]
-StageName = "Prod"
+parameter_overrides = [
+    "StageName=Prod"
+]
