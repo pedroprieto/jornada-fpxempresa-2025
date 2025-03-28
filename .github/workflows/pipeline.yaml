@@ -119,7 +119,7 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${TESTING_REGION} \
             --no-fail-on-empty-changeset \
-            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}, StageName=Dev"
+            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
   # Tarea 4: Test de integración en infraestructura de test
   integration-test:
@@ -165,4 +165,4 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${PROD_REGION} \
             --no-fail-on-empty-changeset \
-            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}, StageName=Prod"
+            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
