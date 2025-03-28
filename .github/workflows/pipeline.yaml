@@ -125,10 +125,15 @@ jobs:
       - name: Obtener URL de la API desplegada para almacenarla en el paso posterior
         id: GetUrl
         run: |
-          sam list stack-outputs \
-            --stack-name ${TESTING_STACK_NAME} \
-            --region ${TESTING_REGION} \
-            --output json |  jq -r ".[0].OutputValue" >> "$GITHUB_OUTPUT"
+          {
+            echo 'ApiUrl<<EOF'
+            curl https://example.com
+            sam list stack-outputs \
+              --stack-name ${TESTING_STACK_NAME} \
+              --region ${TESTING_REGION} \
+              --output json |  jq -r ".[0].OutputValue"
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
 
   # Tarea 4: Test de integración en infraestructura de test
   integration-test:
