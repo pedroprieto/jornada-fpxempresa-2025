@@ -115,12 +115,11 @@ jobs:
       - name: Despliegue de aplicación en infraestructura de test
         run: |
           sam deploy --stack-name ${TESTING_STACK_NAME} \
-            --config-env "dev" \
             --template packaged-testing.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${TESTING_REGION} \
             --no-fail-on-empty-changeset \
-            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
+            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}, StageName=Dev"
 
   # Tarea 4: Test de integración en infraestructura de test
   integration-test:
@@ -162,9 +161,8 @@ jobs:
       - name: Despliegue de aplicación en infraestructura de producción
         run: |
           sam deploy --stack-name ${PROD_STACK_NAME} \
-            --config-env "prod" \
             --template packaged-prod.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${PROD_REGION} \
             --no-fail-on-empty-changeset \
-            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
+            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}, StageName=Prod"
