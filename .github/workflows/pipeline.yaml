@@ -34,7 +34,7 @@ jobs:
           use-installer: true
 
       - name: Build resources
-        run: sam build --template ${SAM_TEMPLATE} --use-container --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
+        run: sam build --template ${SAM_TEMPLATE} --use-container
 
       - name: Configurar credenciales AWS
         uses: aws-actions/configure-aws-credentials@v4
@@ -48,8 +48,7 @@ jobs:
         run: |
           sam package \
             --region ${TESTING_REGION} \
-            --output-template-file packaged-testing.yaml \
-            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
+            --output-template-file packaged-testing.yaml
 
       - uses: actions/upload-artifact@v4
         with:
@@ -68,8 +67,7 @@ jobs:
         run: |
           sam package \
             --region ${PROD_REGION} \
-            --output-template-file packaged-prod.yaml \
-            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
+            --output-template-file packaged-prod.yaml
 
       - uses: actions/upload-artifact@v4
         with:
@@ -143,3 +141,4 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${PROD_REGION} \
             --no-fail-on-empty-changeset \
+            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
