@@ -8,6 +8,9 @@ Parameters:
   LabRoleArn:
     Description: Rol LabRole del lab de AWS
     Type: String
+  StageName:
+    Description: Nombre del stage de API Gateway
+    Type: String
 
 # Resources declares the AWS resources that you want to include in the stack
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
@@ -40,6 +43,7 @@ Resources:
         Api:
           Type: Api
           Properties:
+            RestApiId: !Ref MyAPI
             Path: /
             Method: GET
   # Each Lambda function is defined by properties:
@@ -70,6 +74,7 @@ Resources:
         Api:
           Type: Api
           Properties:
+            RestApiId: !Ref MyAPI
             Path: /{id}
             Method: GET
   # Each Lambda function is defined by properties:
@@ -100,12 +105,18 @@ Resources:
         Api:
           Type: Api
           Properties:
+            RestApiId: !Ref MyAPI
             Path: /
             Method: POST
   # Simple syntax to create a DynamoDB table with a single attribute primary key, more in
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesssimpletable
 
+  MyAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref StageName
   # DynamoDB table to store item: {id: &lt;ID&gt;, name: &lt;NAME&gt;}
+
   SampleTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
@@ -119,7 +130,7 @@ Resources:
 Outputs:
   WebEndpoint:
     Description: API Gateway endpoint URL for Prod stage
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/"
 # # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Api:

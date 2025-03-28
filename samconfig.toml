@@ -29,3 +29,13 @@ warm_containers = "EAGER"
 
 [default.local_start_lambda.parameters]
 warm_containers = "EAGER"
+
+[dev]
+[dev.deploy]
+[dev.deploy.parameters]
+StageName = "Dev"
+
+[prod]
+[prod.deploy]
+[prod.deploy.parameters]
+StageName = "Prod"
