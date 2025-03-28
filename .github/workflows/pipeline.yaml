@@ -49,7 +49,7 @@ jobs:
           sam package \
             --region ${TESTING_REGION} \
             --output-template-file packaged-testing.yaml
-            -- parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
+            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -69,7 +69,7 @@ jobs:
           sam package \
             --region ${PROD_REGION} \
             --output-template-file packaged-prod.yaml
-            -- parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
+            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -103,7 +103,7 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${TESTING_REGION} \
             --no-fail-on-empty-changeset \
-            -- parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
+            --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
   integration-test:
     needs: [deploy-testing]
