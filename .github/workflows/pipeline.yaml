@@ -125,7 +125,6 @@ jobs:
       - name: Obtener URL de la API desplegada para almacenarla en el paso posterior
         id: GetUrl
         run: |
-          echo "ApiUrl=" > "$GITHUB_OUTPUT"
           sam list stack-outputs \
             --stack-name ${TESTING_STACK_NAME} \
             --region ${TESTING_REGION} \
