@@ -92,6 +92,8 @@ jobs:
   deploy-testing:
     needs: [build-and-package]
     runs-on: ubuntu-latest
+    outputs:
+      ApiUrl: ${{ steps.GetUrl.outputs.ApiUrl }}
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v3
@@ -120,11 +122,21 @@ jobs:
             --region ${TESTING_REGION} \
             --no-fail-on-empty-changeset \
             --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
+      - name: Obtener URL de la API desplegada para almacenarla en el paso posterior
+        id: GetUrl
+        run: |
+          echo "ApiUrl=" > "$GITHUB_OUTPUT"
+          sam list stack-outputs \
+            --stack-name ${TESTING_STACK_NAME} \
+            --region ${TESTING_REGION} \
+            --output json |  jq -r ".[0].OutputValue" >> "$GITHUB_OUTPUT"
 
   # Tarea 4: Test de integración en infraestructura de test
   integration-test:
     needs: [deploy-testing]
     runs-on: ubuntu-latest
+    env:
+      ApiUrl: ${{needs.deploy-testing.outputs.ApiUrl}}
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v3
