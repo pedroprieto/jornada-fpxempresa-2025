@@ -11,7 +11,7 @@ env:
   TESTING_REGION: us-east-1
   PROD_STACK_NAME: todo-app-prod
   PROD_REGION: us-east-1
-  LAB_ROLE_ARN: ${ vars.LAB_ROLE_ARN }
+  LAB_ROLE_ARN: ${{ vars.LAB_ROLE_ARN }}
 
 permissions:
   id-token: write
