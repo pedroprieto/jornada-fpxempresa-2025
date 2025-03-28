@@ -4,6 +4,11 @@ Description: >-
 Transform:
 - AWS::Serverless-2016-10-31
 
+Parameters:
+  LabRoleArn:
+    Description: Rol LabRole del lab de AWS
+    Type: String
+
 # Resources declares the AWS resources that you want to include in the stack
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
 Resources:
@@ -14,6 +19,7 @@ Resources:
   getAllItemsFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Role: !Ref LabRoleArn
       Handler: src/handlers/get-all-items.getAllItemsHandler
       Runtime: nodejs18.x
       Architectures:
@@ -43,6 +49,7 @@ Resources:
   getByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Role: !Ref LabRoleArn
       Handler: src/handlers/get-by-id.getByIdHandler
       Runtime: nodejs18.x
       Architectures:
@@ -72,6 +79,7 @@ Resources:
   putItemFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Role: !Ref LabRoleArn
       Handler: src/handlers/put-item.putItemHandler
       Runtime: nodejs18.x
       Architectures:
@@ -113,3 +121,9 @@ Outputs:
     Description: API Gateway endpoint URL for Prod stage
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
 # # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,PUT, OPTIONS'"
+      AllowHeaders: "'content-type'"
+      AllowOrigin: "'*'"

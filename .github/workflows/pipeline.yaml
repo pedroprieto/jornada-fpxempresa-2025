@@ -11,6 +11,7 @@ env:
   TESTING_REGION: us-east-1
   PROD_STACK_NAME: todo-app-prod
   PROD_REGION: us-east-1
+  LAB_ROLE_ARN: ${ vars.LAB_ROLE_ARN }
 
 permissions:
   id-token: write
@@ -33,7 +34,7 @@ jobs:
           use-installer: true
 
       - name: Build resources
-        run: sam build --template ${SAM_TEMPLATE} --use-container
+        run: sam build --template ${SAM_TEMPLATE} --use-container --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
       - name: Configurar credenciales AWS
         uses: aws-actions/configure-aws-credentials@v4
@@ -48,6 +49,7 @@ jobs:
           sam package \
             --region ${TESTING_REGION} \
             --output-template-file packaged-testing.yaml
+            -- parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -67,6 +69,7 @@ jobs:
           sam package \
             --region ${PROD_REGION} \
             --output-template-file packaged-prod.yaml
+            -- parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -100,6 +103,7 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${TESTING_REGION} \
             --no-fail-on-empty-changeset \
+            -- parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
   integration-test:
     needs: [deploy-testing]
