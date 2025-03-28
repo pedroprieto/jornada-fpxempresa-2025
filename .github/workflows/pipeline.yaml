@@ -159,7 +159,10 @@ jobs:
           aws-region: ${{ env.PROD_REGION }}
 
       - name: Borrar infraestructura de test
-        run: sam delete --stack-name ${TESTING_STACK_NAME} --region ${TESTING_REGION}
+        run: |
+          sam delete --stack-name ${TESTING_STACK_NAME} \
+            --region ${TESTING_REGION} \
+            --no-prompts
 
       - name: Despliegue de aplicación en infraestructura de producción
         run: |
