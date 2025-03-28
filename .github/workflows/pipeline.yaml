@@ -6,21 +6,32 @@ on:
       - 'master'
 
 env:
+  # Plantilla de Infraestructura como Código (IaC). Define los recursos a crear
   SAM_TEMPLATE: template.yaml
+  # Nombre del conjunto de recursos desplegados para testeo
   TESTING_STACK_NAME: todo-app-dev
+  # Región donde desplegar la infraestructura de testeo
   TESTING_REGION: us-east-1
+  # Nombre del conjunto de recursos desplegados para producción
   PROD_STACK_NAME: todo-app-prod
+  # Región donde desplegar la infraestructura de producción
   PROD_REGION: us-east-1
+  # ARN del rol "LabRole" del laboratorio de AWS
+  # Utilizado por las funciones Lambda (backend) para poder acceder a la base de datos
   LAB_ROLE_ARN: ${{ vars.LAB_ROLE_ARN }}
 
 permissions:
   id-token: write
   contents: read
+
+# Tareas del pipeline
 jobs:
+  # Tarea 1: tests unitarios
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
       - name: Instalar dependencias
         run: npm install
       - name: Lanzar tests unitarios
@@ -30,16 +41,19 @@ jobs:
       - name: Eliminar dependencias de desarrollo y dejar solo las de producción
         run: npm prune --production
 
+  # Tarea 2: Compilación y empaquetado de la aplicación
   build-and-package:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: aws-actions/setup-sam@v2
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
+      - name: Instalar SAM CLI
+        uses: aws-actions/setup-sam@v2
         with:
           use-installer: true
 
-      - name: Build resources
+      - name: Compilar aplicación
         run: sam build --template ${SAM_TEMPLATE} --use-container
 
       - name: Configurar credenciales AWS
@@ -50,45 +64,43 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.TESTING_REGION }}
 
-      - name: Upload artifacts to testing artifact buckets
+      - name: Empaquetar aplicación para testeo y compilar plantilla
         run: |
           sam package \
             --region ${TESTING_REGION} \
             --output-template-file packaged-testing.yaml
 
-      - uses: actions/upload-artifact@v4
+      - name: Almacenar plantilla de testeo compilada para el siguiente paso
+        uses: actions/upload-artifact@v4
         with:
           name: packaged-testing.yaml
           path: packaged-testing.yaml
 
-      - name: Configurar credenciales AWS
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ env.PROD_REGION }}
-
-      - name: Upload artifacts to production artifact buckets
+      - name: Empaquetar aplicación para producción y compilar plantilla
         run: |
           sam package \
             --region ${PROD_REGION} \
             --output-template-file packaged-prod.yaml
 
-      - uses: actions/upload-artifact@v4
+      - name: Almacenar plantilla de producción compilada para el siguiente paso
+        uses: actions/upload-artifact@v4
         with:
           name: packaged-prod.yaml
           path: packaged-prod.yaml
 
+  # Tarea 3: Despliegue de aplicación en infraestructura de test
   deploy-testing:
     needs: [build-and-package]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: aws-actions/setup-sam@v2
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
+      - name: Instalar SAM CLI
+        uses: aws-actions/setup-sam@v2
         with:
           use-installer: true
-      - uses: actions/download-artifact@v4
+      - name: Obtener plantilla de test almacenada en el paso anterior
+        uses: actions/download-artifact@v4
         with:
           name: packaged-testing.yaml
 
@@ -100,7 +112,7 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.TESTING_REGION }}
 
-      - name: Deploy to testing account
+      - name: Despliegue de aplicación en infraestructura de test
         run: |
           sam deploy --stack-name ${TESTING_STACK_NAME} \
             --template packaged-testing.yaml \
@@ -109,26 +121,32 @@ jobs:
             --no-fail-on-empty-changeset \
             --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
 
+  # Tarea 4: Test de integración en infraestructura de test
   integration-test:
     needs: [deploy-testing]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
       - run: |
           # trigger the integration tests here
 
+  # Tarea 5: Despliegue de aplicación en infraestructura de producción
   deploy-prod:
     needs: [integration-test]
     runs-on: ubuntu-latest
-    # Configure GitHub Action Environment to have a manual approval step before deployment to production
+    # Configurar un GitHub Action Environment para activar una aprobación manual
     # https://docs.github.com/en/actions/reference/environments
     environment: testenv
     steps:
-      - uses: actions/checkout@v3
-      - uses: aws-actions/setup-sam@v2
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
+      - name: Instalar SAM CLI
+        uses: aws-actions/setup-sam@v2
         with:
           use-installer: true
-      - uses: actions/download-artifact@v4
+      - name: Obtener plantilla de producción almacenada en el paso anterior
+        uses: actions/download-artifact@v4
         with:
           name: packaged-prod.yaml
 
@@ -140,7 +158,7 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.PROD_REGION }}
 
-      - name: Deploy to production account
+      - name: Despliegue de aplicación en infraestructura de producción
         run: |
           sam deploy --stack-name ${PROD_STACK_NAME} \
             --template packaged-prod.yaml \
