@@ -1,11 +1,11 @@
 * Repositorio charla DevOps - I Jornadas FP x Empresa Alicante 2025
 https://fpxempresa.com/
 
-** Cliente para interactuar con la aplicación
-https://github.com/pedroprieto/aws-sam-client-serverless-api
-
 ** Presentación
 [[https://pedroprieto.github.io/jornada-fpxempresa-2025]]
+
+** Cliente para interactuar con la aplicación
+https://github.com/pedroprieto/aws-sam-client-serverless-api
 
 ** Estructura del proyecto
 Aplicación basada en la plantilla "Serverless API" del framework [[https://aws.amazon.com/es/serverless/sam/][AWS SAM]].
@@ -24,4 +24,9 @@ Además, necesita la siguiente [[https://docs.github.com/en/actions/writing-work
 
 Por último, es necesario crear un [[https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/using-environments-for-deployment][entorno]] en el repositorio, con nombre ~testenv~, que active la revisión manual de código antes del despliegue en producción.
 
-** 
+** Despliegue manual de la aplicación
+#+begin_src bash
+  npm install
+  sam build
+  sam deploy --guided
+#+end_src

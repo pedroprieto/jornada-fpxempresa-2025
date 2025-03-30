@@ -19,7 +19,7 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 - Cambios organizativos
   - Equipos de 2 pizzas
   - Multidisciplinares
-  - Mmetodologías ágiles
+  - Metodologías ágiles
 - Herramientas
   - Automatización
   - Tests
@@ -102,7 +102,7 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 #+end_src
 
 #+RESULTS:
-[[file:./imagenes/iac.png]]
+[[./imagenes/iac.png]]
 
 * Serverless
 - No hay servidores que mantener
@@ -112,7 +112,14 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 
 * Monitorización y logging
 * Seguridad
-* Control de versiones
+- DevSecOps
+- Principio del mínimo privilegio
+- No almacenar credenciales en código
+- Utilizar secretos y variables de entorno
+- Herramientas de monitorización
+- Seguridad preventiva
+- Seguridad paliativa
+
 * Arquitectura de la aplicación
 #+begin_src plantuml :file ./imagenes/arquitectura.png :exports results
       @startuml
@@ -151,9 +158,16 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 #+end_src
 
 #+RESULTS:
-[[file:./imagenes/arquitectura.png]]
+[[./imagenes/arquitectura.png]]
+
+* Control de versiones
+[[./imagenes/git.png]]
 
 * Desarrollo Guiado por Test
+- Escribir los tests (pruebas unitarias) antes que el código
+- Una vez creada la prueba, se implementa el código necesario para superarla
+- Por último, se refactoriza el código escrito para eliminar duplicidades y hacerlo más limpio y eficiente
+
 * Integración continua: GitHub Actions
 #+begin_src plantuml :file ./imagenes/cipipeline.png :exports results
   @startuml
@@ -162,14 +176,11 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
   !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v19.0/dist
   !include AWSPuml/AWSCommon.puml
   !include AWSPuml/AWSExperimental.puml
-  !include AWSPuml/ApplicationIntegration/SimpleNotificationService.puml
-  !include AWSPuml/Compute/EC2.puml
   !include AWSPuml/DeveloperTools/CodeBuild.puml
   !include AWSPuml/DeveloperTools/CodeDeploy.puml
   !include AWSPuml/DeveloperTools/CodePipeline.puml
   !include AWSPuml/General/GitRepository.puml
   !include AWSPuml/General/User.puml
-  !include AWSPuml/Storage/SimpleStorageService.puml
   !include AWSPuml/Storage/Storage.puml
 
   $AWSGroupColoring(CodePipelineGroup, $AWSColor(DeveloperTools))
@@ -213,6 +224,44 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 [[./imagenes/cipipeline.png]]
 
 * Integración Continua I: Tests unitarios
+#+begin_src plantuml :file ./imagenes/ci1.png :exports results
+  @startuml
+  '!$AWS_DARK = true
+
+  !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v19.0/dist
+  !include AWSPuml/AWSCommon.puml
+  !include AWSPuml/DeveloperTools/CodeBuild.puml
+  !include AWSPuml/DeveloperTools/CodePipeline.puml
+  !include AWSPuml/General/GitRepository.puml
+  !include AWSPuml/AWSExperimental.puml
+
+  $AWSGroupColoring(CodePipelineGroup, $AWSColor(DeveloperTools))
+  !define CodePipelineGroup(g_alias, g_label="Integración continua") $AWSDefineGroup(g_alias, g_label, CodePipeline, CodePipelineGroup)
+
+  hide stereotype
+  skinparam linetype ortho
+  skinparam rectangle {
+      BackgroundColor $AWS_BG_COLOR
+      BorderColor transparent
+  }
+
+  !procedure $AWSIcon($service, $line1, $line2="")
+  rectangle "$AWSImg($service)\n$line1\n$line2"
+  !endprocedure 
+
+  CodePipelineGroup(pipeline){
+    $AWSIcon(GitRepository, "Git Repo") as repo
+    $AWSIcon(CodeBuild, "Tests unitarios") as testunitario
+          
+    repo -r-> testunitario: \n<$Callout_1>
+  }
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[./imagenes/ci1.png]]
+
+** Tests unitarios
 #+begin_src yaml
   test:
     steps:
@@ -222,6 +271,50 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 #+end_src
 
 * Integración Continua II
+#+begin_src plantuml :file ./imagenes/ci2.png :exports results
+  @startuml
+  '!$AWS_DARK = true
+
+  !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v19.0/dist
+  !include AWSPuml/AWSCommon.puml
+  !include AWSPuml/AWSExperimental.puml
+  !include AWSPuml/DeveloperTools/CodeBuild.puml
+  !include AWSPuml/DeveloperTools/CodeDeploy.puml
+  !include AWSPuml/DeveloperTools/CodePipeline.puml
+  !include AWSPuml/General/GitRepository.puml
+  !include AWSPuml/Storage/Storage.puml
+
+  $AWSGroupColoring(CodePipelineGroup, $AWSColor(DeveloperTools))
+  !define CodePipelineGroup(g_alias, g_label="Integración continua") $AWSDefineGroup(g_alias, g_label, CodePipeline, CodePipelineGroup)
+
+  hide stereotype
+  skinparam linetype ortho
+  skinparam rectangle {
+      BackgroundColor $AWS_BG_COLOR
+      BorderColor transparent
+  }
+
+  !procedure $AWSIcon($service, $line1, $line2="")
+  rectangle "$AWSImg($service)\n$line1\n$line2"
+  !endprocedure 
+
+  CodePipelineGroup(pipeline){
+    $AWSIcon(GitRepository, "Git Repo") as repo
+    $AWSIcon(CodeBuild, "Tests unitarios") as testunitario
+    $AWSIcon(CodeBuild, "Compilación") as compilacion
+    $AWSIcon(Storage, "App compilada", "Plantilla compilada") as artefacto
+          
+    repo -r-> testunitario: \n<$Callout_1>
+    testunitario -r-> compilacion: \n<$Callout_2>
+    compilacion -d-> artefacto: \n<$Callout_3><$Callout_SP>
+  }
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[./imagenes/ci2.png]]
+
+** Compilación
 #+begin_src yaml
   build-and-package:
     steps:
@@ -244,6 +337,55 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 [[./imagenes/secretos.png]]
 
 * Entrega Continua
+#+begin_src plantuml :file ./imagenes/ci3.png :exports results
+  @startuml
+  '!$AWS_DARK = true
+
+  !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v19.0/dist
+  !include AWSPuml/AWSCommon.puml
+  !include AWSPuml/AWSExperimental.puml
+  !include AWSPuml/DeveloperTools/CodeBuild.puml
+  !include AWSPuml/DeveloperTools/CodeDeploy.puml
+  !include AWSPuml/DeveloperTools/CodePipeline.puml
+  !include AWSPuml/General/GitRepository.puml
+  !include AWSPuml/General/User.puml
+  !include AWSPuml/Storage/Storage.puml
+
+  $AWSGroupColoring(CodePipelineGroup, $AWSColor(DeveloperTools))
+  !define CodePipelineGroup(g_alias, g_label="Integración continua") $AWSDefineGroup(g_alias, g_label, CodePipeline, CodePipelineGroup)
+
+  hide stereotype
+  skinparam linetype ortho
+  skinparam rectangle {
+      BackgroundColor $AWS_BG_COLOR
+      BorderColor transparent
+  }
+
+  !procedure $AWSIcon($service, $line1, $line2="")
+  rectangle "$AWSImg($service)\n$line1\n$line2"
+  !endprocedure 
+
+  CodePipelineGroup(pipeline){
+    $AWSIcon(GitRepository, "Git Repo") as repo
+    $AWSIcon(CodeBuild, "Tests unitarios") as testunitario
+    $AWSIcon(CodeBuild, "Compilación") as compilacion
+    $AWSIcon(CodeDeploy, "Despliegue de test") as desplieguetest
+    $AWSIcon(Storage, "URL app test") as urltest
+    $AWSIcon(Storage, "App compilada", "Plantilla compilada") as artefacto
+          
+    repo -r-> testunitario: \n<$Callout_1>
+    testunitario -r-> compilacion: \n<$Callout_2>
+    compilacion -d-> artefacto: \n<$Callout_3><$Callout_SP>
+    compilacion -r-> desplieguetest: \n<$Callout_4>
+    desplieguetest -d-> urltest: \n<$Callout_5><$Callout_SP>
+  }
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[./imagenes/ci3.png]]
+
+** Despliegue para testeo
 #+begin_src yaml
   deploy-testing:
     outputs:
@@ -259,6 +401,57 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 #+end_src
 
 * Integración Continua III: Tests de integración
+#+begin_src plantuml :file ./imagenes/ci4.png :exports results
+  @startuml
+  '!$AWS_DARK = true
+
+  !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v19.0/dist
+  !include AWSPuml/AWSCommon.puml
+  !include AWSPuml/AWSExperimental.puml
+  !include AWSPuml/DeveloperTools/CodeBuild.puml
+  !include AWSPuml/DeveloperTools/CodeDeploy.puml
+  !include AWSPuml/DeveloperTools/CodePipeline.puml
+  !include AWSPuml/General/GitRepository.puml
+  !include AWSPuml/General/User.puml
+  !include AWSPuml/Storage/Storage.puml
+
+  $AWSGroupColoring(CodePipelineGroup, $AWSColor(DeveloperTools))
+  !define CodePipelineGroup(g_alias, g_label="Integración continua") $AWSDefineGroup(g_alias, g_label, CodePipeline, CodePipelineGroup)
+
+  hide stereotype
+  skinparam linetype ortho
+  skinparam rectangle {
+      BackgroundColor $AWS_BG_COLOR
+      BorderColor transparent
+  }
+
+  !procedure $AWSIcon($service, $line1, $line2="")
+  rectangle "$AWSImg($service)\n$line1\n$line2"
+  !endprocedure 
+
+  CodePipelineGroup(pipeline){
+    $AWSIcon(GitRepository, "Git Repo") as repo
+    $AWSIcon(CodeBuild, "Tests unitarios") as testunitario
+    $AWSIcon(CodeBuild, "Compilación") as compilacion
+    $AWSIcon(CodeDeploy, "Despliegue de test") as desplieguetest
+    $AWSIcon(CodeBuild, "Test integración") as testintegracion
+    $AWSIcon(Storage, "URL app test") as urltest
+    $AWSIcon(Storage, "App compilada", "Plantilla compilada") as artefacto
+          
+    repo -r-> testunitario: \n<$Callout_1>
+    testunitario -r-> compilacion: \n<$Callout_2>
+    compilacion -d-> artefacto: \n<$Callout_3><$Callout_SP>
+    compilacion -r-> desplieguetest: \n<$Callout_4>
+    desplieguetest -d-> urltest: \n<$Callout_5><$Callout_SP>
+    desplieguetest -r-> testintegracion: \n<$Callout_6>
+  }
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[./imagenes/ci4.png]]
+
+** Tests de integración
 #+begin_src yaml
   integration-test:
     env:
@@ -270,6 +463,9 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 #+end_src
 
 * Despliegue en producción
+[[./imagenes/cipipeline.png]]
+
+** Despliegue en producción
 #+begin_src yaml
   deploy-prod:
     environment: testenv
