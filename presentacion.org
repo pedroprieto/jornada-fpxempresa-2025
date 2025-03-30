@@ -111,6 +111,8 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 - Alta disponibilidad y tolerancia a errores
 
 * Monitorización y logging
+[[./imagenes/monitorizacion.png]]
+
 * Seguridad
 - DevSecOps
 - Principio del mínimo privilegio
@@ -120,7 +122,7 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 - Seguridad preventiva
 - Seguridad paliativa
 
-* Arquitectura de la aplicación
+* Veamos un ejemplo sencillo...
 #+begin_src plantuml :file ./imagenes/arquitectura.png :exports results
       @startuml
   '!$AWS_DARK = true
@@ -270,6 +272,9 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
       - name: Lanzar tests unitarios
 #+end_src
 
+* Integración continua: secretos y variables
+[[./imagenes/secretos.png]]
+
 * Integración Continua II
 #+begin_src plantuml :file ./imagenes/ci2.png :exports results
   @startuml
@@ -332,9 +337,6 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
         with:
           name: packaged-prod.yaml
 #+end_src
-
-* Integración continua: secretos y variables
-[[./imagenes/secretos.png]]
 
 * Entrega Continua
 #+begin_src plantuml :file ./imagenes/ci3.png :exports results
@@ -478,3 +480,6 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
       - name: Despliegue de aplicación en infraestructura de producción
       - name: Borrar infraestructura de test
 #+end_src
+
+* ¡¡MUCHAS GRACIAS!!
+pedroprietoalarcon@gmail.com
