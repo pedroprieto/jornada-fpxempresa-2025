@@ -172,12 +172,6 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.PROD_REGION }}
 
-      - name: Borrar infraestructura de test
-        run: |
-          sam delete --stack-name ${TESTING_STACK_NAME} \
-            --region ${TESTING_REGION} \
-            --no-prompts
-
       - name: Despliegue de aplicación en infraestructura de producción
         run: |
           sam deploy --stack-name ${PROD_STACK_NAME} \
@@ -186,3 +180,9 @@ jobs:
             --region ${PROD_REGION} \
             --no-fail-on-empty-changeset \
             --parameter-overrides "LabRoleArn=${LAB_ROLE_ARN}"
+
+      - name: Borrar infraestructura de test
+        run: |
+          sam delete --stack-name ${TESTING_STACK_NAME} \
+            --region ${TESTING_REGION} \
+            --no-prompts
