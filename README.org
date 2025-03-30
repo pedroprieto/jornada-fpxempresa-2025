@@ -5,4 +5,23 @@ https://fpxempresa.com/
 https://github.com/pedroprieto/aws-sam-client-serverless-api
 
 ** Presentación
-https://pedroprieto.github.io/aws-sam-client-serverless-api
+[[https://pedroprieto.github.io/jornada-fpxempresa-2025]]
+
+** Estructura del proyecto
+Aplicación basada en la plantilla "Serverless API" del framework [[https://aws.amazon.com/es/serverless/sam/][AWS SAM]].
+
+** Infraestructura
+La aplicación está pensada para desplegar en un laboratorio de [[https://aws.amazon.com/es/training/awsacademy/][AWS Academy]].
+
+** Secretos y variables de entorno
+Para funcionar correctamente, es necesario configurar los siguientes [[https://docs.github.com/es/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions][secretos]] de GitHub Actions en el repositorio, con las credenciales del laboratorio de AWS:
+- ~AWS_ACCESS_KEY_ID~
+- ~AWS_SECRET_ACCESS_KEY~
+- ~AWS_SESSION_TOKEN~
+
+Además, necesita la siguiente [[https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables][variable]] de GitHub Actions:
+- ~LAB_ROLE_ARN~ - Rol del laboratorio de AWS
+
+Por último, es necesario crear un [[https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/using-environments-for-deployment][entorno]] en el repositorio, con nombre ~testenv~, que active la revisión manual de código antes del despliegue en producción.
+
+** 
