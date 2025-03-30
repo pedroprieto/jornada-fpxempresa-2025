@@ -1,0 +1,284 @@
+#+TITLE: DevOps
+#+SUBTITLE: o por qué puedes trabajar menos (si quieres...)
+#+AUTHOR: Pedro Prieto Alarcón
+#+EMAIL: pedroprietoalarcon@gmail.com
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_THEME: moon
+#+REVEAL_HLEVEL: 1
+#+OPTIONS: toc:nil num:nil timestamp:nil
+
+* Presentación y demo
+https://github.com/pedroprieto/jornada-fpxempresa-2025
+#+attr_html: :width 400px
+[[./qr/qr-code.svg]]
+
+* DevOps
+https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.svg/640px-Devops-toolchain-es.svg.png
+
+** DevOps
+- Cambios organizativos
+  - Equipos de 2 pizzas
+  - Multidisciplinares
+  - Mmetodologías ágiles
+- Herramientas
+  - Automatización
+  - Tests
+- Patrones y arquitecturas
+  - Microservicios
+
+** DevOps
+[[./imagenes/twopizza.jpg]]
+
+* Microservicios
+- Agilidad
+- Seguridad
+- Escalado independiente
+- Alta disponibilidad
+- Desacoplamiento
+- Independencia tecnológica
+
+* Infraestructura como Código
+#+begin_src plantuml :file ./imagenes/iac.png :exports results
+  @startuml VPC
+  ' Uncomment the line below for "dark mode" styling
+  '!$AWS_DARK = true
+
+  !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v19.0/dist
+  !include AWSPuml/AWSCommon.puml
+  !include AWSPuml/AWSSimplified.puml
+  !include AWSPuml/Compute/EC2.puml
+  !include AWSPuml/Compute/EC2Instance.puml
+  !include AWSPuml/Groups/AWSCloud.puml
+  !include AWSPuml/Groups/Generic.puml
+  !include AWSPuml/Groups/VPC.puml
+  !include AWSPuml/Groups/AvailabilityZone.puml
+  !include AWSPuml/Groups/PublicSubnet.puml
+  !include AWSPuml/Groups/PrivateSubnet.puml
+  !include AWSPuml/NetworkingContentDelivery/VPCNATGateway.puml
+  !include AWSPuml/NetworkingContentDelivery/VPCInternetGateway.puml
+  !include AWSPuml/ManagementGovernance/CloudFormationTemplate.puml
+
+  hide stereotype
+  skinparam linetype ortho
+
+  AWSCloudGroup(cloud,"Infraestructura") {
+    VPCGroup(vpc) {
+      VPCInternetGateway(internet_gateway, "Internet gateway", "")
+
+      AvailabilityZoneGroup(az_1, "\tAvailability Zone 1\t") {
+        PublicSubnetGroup(az_1_public, "Public subnet") {
+          VPCNATGateway(az_1_nat_gateway, "NAT gateway", "") #Transparent
+        }
+        PrivateSubnetGroup(az_1_private, "Private subnet") {
+          EC2Instance(az_1_ec2_1, "Instance", "") #Transparent
+        }
+
+        az_1_ec2_1 .u.> az_1_nat_gateway
+      }
+
+      AvailabilityZoneGroup(az_2, "\tAvailability Zone 2\t") {
+        PublicSubnetGroup(az_2_public, "Public subnet") {
+          VPCNATGateway(az_2_nat_gateway, "NAT gateway", "") #Transparent
+        }
+        PrivateSubnetGroup(az_2_private, "Private subnet") {
+          EC2Instance(az_2_ec2_1, "Instance", "") #Transparent
+        }
+
+        az_2_ec2_1 .u.> az_2_nat_gateway
+      }
+
+      az_2_nat_gateway .[hidden]u.> internet_gateway
+      az_1_nat_gateway .[hidden]u.> internet_gateway
+    }
+  }
+
+  GenericGroup(cf, "Plantilla de código") {
+    CloudFormationTemplate(plantilla, "Código", "")
+  }
+
+    left to right direction
+    cf --> cloud
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:./imagenes/iac.png]]
+
+* Serverless
+- No hay servidores que mantener
+- Escalado automático
+- No hay que pagar por servidores sin usar
+- Alta disponibilidad y tolerancia a errores
+
+* Monitorización y logging
+* Seguridad
+* Control de versiones
+* Arquitectura de la aplicación
+#+begin_src plantuml :file ./imagenes/arquitectura.png :exports results
+      @startuml
+  '!$AWS_DARK = true
+
+  !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v19.0/dist
+  !include AWSPuml/AWSCommon.puml
+
+  !include AWSPuml/AWSSimplified.puml
+
+  !include AWSPuml/General/Users.puml
+  !include AWSPuml/NetworkingContentDelivery/APIGateway.puml
+  !include AWSPuml/Compute/Lambda.puml
+  !include AWSPuml/Database/DynamoDB.puml
+
+  skinparam linetype ortho
+
+    left to right direction
+
+    Users(usuarios, "Usuarios", "")
+    APIGateway(API, "API", "")
+    Lambda(lambda1, "Listado", "")
+    Lambda(lambda2, "Elemento", "")
+    Lambda(lambda3, "Añadir", "")
+    DynamoDB(tabla, "BD", "")
+
+    usuarios --> API
+    API --> lambda1
+    API --> lambda2
+    API --> lambda3
+    lambda1 --> tabla
+    lambda2 --> tabla
+    lambda3 --> tabla
+
+      @enduml
+#+end_src
+
+#+RESULTS:
+[[file:./imagenes/arquitectura.png]]
+
+* Desarrollo Guiado por Test
+* Integración continua: GitHub Actions
+#+begin_src plantuml :file ./imagenes/cipipeline.png :exports results
+  @startuml
+  '!$AWS_DARK = true
+
+  !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v19.0/dist
+  !include AWSPuml/AWSCommon.puml
+  !include AWSPuml/AWSExperimental.puml
+  !include AWSPuml/ApplicationIntegration/SimpleNotificationService.puml
+  !include AWSPuml/Compute/EC2.puml
+  !include AWSPuml/DeveloperTools/CodeBuild.puml
+  !include AWSPuml/DeveloperTools/CodeDeploy.puml
+  !include AWSPuml/DeveloperTools/CodePipeline.puml
+  !include AWSPuml/General/GitRepository.puml
+  !include AWSPuml/General/User.puml
+  !include AWSPuml/Storage/SimpleStorageService.puml
+  !include AWSPuml/Storage/Storage.puml
+
+  $AWSGroupColoring(CodePipelineGroup, $AWSColor(DeveloperTools))
+  !define CodePipelineGroup(g_alias, g_label="Integración continua") $AWSDefineGroup(g_alias, g_label, CodePipeline, CodePipelineGroup)
+
+  hide stereotype
+  skinparam linetype ortho
+  skinparam rectangle {
+      BackgroundColor $AWS_BG_COLOR
+      BorderColor transparent
+  }
+
+  !procedure $AWSIcon($service, $line1, $line2="")
+  rectangle "$AWSImg($service)\n$line1\n$line2"
+  !endprocedure 
+
+  CodePipelineGroup(pipeline){
+    $AWSIcon(GitRepository, "Git Repo") as repo
+    $AWSIcon(CodeBuild, "Tests unitarios") as testunitario
+    $AWSIcon(CodeBuild, "Compilación") as compilacion
+    $AWSIcon(CodeDeploy, "Despliegue de test") as desplieguetest
+    $AWSIcon(CodeBuild, "Test integración") as testintegracion
+    $AWSIcon(User, "Aprobación", "manual") as aprobacion
+    $AWSIcon(CodeDeploy, "Despliegue","en producción") as despliegueprod
+    $AWSIcon(Storage, "URL app test") as urltest
+    $AWSIcon(Storage, "App compilada", "Plantilla compilada") as artefacto
+          
+    repo -r-> testunitario: \n<$Callout_1>
+    testunitario -r-> compilacion: \n<$Callout_2>
+    compilacion -d-> artefacto: \n<$Callout_3><$Callout_SP>
+    compilacion -r-> desplieguetest: \n<$Callout_4>
+    desplieguetest -d-> urltest: \n<$Callout_5><$Callout_SP>
+    desplieguetest -r-> testintegracion: \n<$Callout_6>
+    testintegracion -r-> aprobacion: \n<$Callout_7>
+    aprobacion -r-> despliegueprod: \n<$Callout_8>
+  }
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[./imagenes/cipipeline.png]]
+
+* Integración Continua I: Tests unitarios
+#+begin_src yaml
+  test:
+    steps:
+      - name: Clonar repositorio
+      - name: Instalar dependencias
+      - name: Lanzar tests unitarios
+#+end_src
+
+* Integración Continua II
+#+begin_src yaml
+  build-and-package:
+    steps:
+      - name: Clonar repositorio
+      - name: Instalar dependencias de producción únicamente
+      - name: Instalar SAM CLI
+      - name: Compilar aplicación
+      - name: Configurar credenciales AWS
+      - name: Empaquetar aplicación para testeo y compilar plantilla
+      - name: Almacenar plantilla de testeo compilada para el siguiente paso
+        with:
+          name: packaged-testing.yaml
+      - name: Empaquetar aplicación para producción y compilar plantilla
+      - name: Almacenar plantilla de producción compilada para el siguiente paso
+        with:
+          name: packaged-prod.yaml
+#+end_src
+
+* Integración continua: secretos y variables
+[[./imagenes/secretos.png]]
+
+* Entrega Continua
+#+begin_src yaml
+  deploy-testing:
+    outputs:
+      ApiUrl: ${{ steps.GetUrl.outputs.ApiUrl }}
+    steps:
+      - name: Instalar SAM CLI
+      - name: Obtener plantilla de test almacenada en el paso anterior
+        with:
+          name: packaged-testing.yaml
+      - name: Configurar credenciales AWS
+      - name: Despliegue de aplicación en infraestructura de test
+      - name: Obtener URL de la API desplegada para almacenarla en el paso posterior
+#+end_src
+
+* Integración Continua III: Tests de integración
+#+begin_src yaml
+  integration-test:
+    env:
+      ApiUrl: ${{needs.deploy-testing.outputs.ApiUrl}}
+    steps:
+      - name: Clonar repositorio
+      - name: Instalar dependencias
+      - name: Ejecutar test de integración
+#+end_src
+
+* Despliegue en producción
+#+begin_src yaml
+  deploy-prod:
+    environment: testenv
+    steps:
+      - name: Instalar SAM CLI
+      - name: Obtener plantilla de producción almacenada en el paso anterior
+        with:
+          name: packaged-prod.yaml
+      - name: Configurar credenciales AWS
+      - name: Despliegue de aplicación en infraestructura de producción
+      - name: Borrar infraestructura de test
+#+end_src

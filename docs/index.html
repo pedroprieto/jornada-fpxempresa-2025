@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>DevOps</title>
+<meta name="author" content="Pedro Prieto Alarcón"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/moon.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">DevOps</h1><p class="subtitle">o por qué puedes trabajar menos (si quieres&#x2026;)</p>
+<h2 class="author">Pedro Prieto Alarcón</h2>
+</section>
+<section>
+<section id="slide-org65f6dd4">
+<h2 id="org65f6dd4">Presentación y demo</h2>
+<p>
+<a href="https://github.com/pedroprieto/jornada-fpxempresa-2025">https://github.com/pedroprieto/jornada-fpxempresa-2025</a>
+</p>
+
+<div id="orgb17053c" class="figure">
+<p><img src="./qr/qr-code.svg" alt="qr-code.svg" class="org-svg" width="400px" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org88d8fb0">
+<h2 id="org88d8fb0">DevOps</h2>
+
+<div id="orgfa4567f" class="figure">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.svg/640px-Devops-toolchain-es.svg.png" alt="640px-Devops-toolchain-es.svg.png" />
+</p>
+</div>
+</section>
+<section id="slide-org7842261">
+<h3 id="org7842261">DevOps</h3>
+<ul>
+<li>Cambios organizativos
+<ul>
+<li>Equipos de 2 pizzas</li>
+<li>Multidisciplinares</li>
+<li>Mmetodologías ágiles</li>
+
+</ul></li>
+<li>Herramientas
+<ul>
+<li>Automatización</li>
+<li>Tests</li>
+
+</ul></li>
+<li>Patrones y arquitecturas
+<ul>
+<li>Microservicios</li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-orgb8fd534">
+<h3 id="orgb8fd534">DevOps</h3>
+
+<div id="org38ecf03" class="figure">
+<p><img src="./imagenes/twopizza.jpg" alt="twopizza.jpg" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf5b62e8">
+<h2 id="orgf5b62e8">Microservicios</h2>
+<ul>
+<li>Agilidad</li>
+<li>Seguridad</li>
+<li>Escalado independiente</li>
+<li>Alta disponibilidad</li>
+<li>Desacoplamiento</li>
+<li>Independencia tecnológica</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org84aa528">
+<h2 id="org84aa528">Infraestructura como Código</h2>
+
+<div id="org8fd39fe" class="figure">
+<p><img src="./imagenes/iac.png" alt="iac.png" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org07729d5">
+<h2 id="org07729d5">Serverless</h2>
+<ul>
+<li>No hay servidores que mantener</li>
+<li>Escalado automático</li>
+<li>No hay que pagar por servidores sin usar</li>
+<li>Alta disponibilidad y tolerancia a errores</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org7febecd">
+<h2 id="org7febecd">Monitorización y logging</h2>
+</section>
+</section>
+<section>
+<section id="slide-org65268e2">
+<h2 id="org65268e2">Seguridad</h2>
+</section>
+</section>
+<section>
+<section id="slide-orgb7dd8bc">
+<h2 id="orgb7dd8bc">Control de versiones</h2>
+</section>
+</section>
+<section>
+<section id="slide-orgd10eaef">
+<h2 id="orgd10eaef">Arquitectura de la aplicación</h2>
+
+<div id="org775b568" class="figure">
+<p><img src="./imagenes/arquitectura.png" alt="arquitectura.png" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4fe22d1">
+<h2 id="org4fe22d1">Desarrollo Guiado por Test</h2>
+</section>
+</section>
+<section>
+<section id="slide-org1432ac0">
+<h2 id="org1432ac0">Integración continua: GitHub Actions</h2>
+
+<div id="orgadd2bea" class="figure">
+<p><img src="./imagenes/cipipeline.png" alt="cipipeline.png" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbe459ba">
+<h2 id="orgbe459ba">Integración Continua I: Tests unitarios</h2>
+<div class="org-src-container">
+
+<pre  class="src src-yaml"   ><code trim><span style="color: #f6717e;">test</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">steps</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Clonar repositorio
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Instalar dependencias
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Lanzar tests unitarios
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge481b5a">
+<h2 id="orge481b5a">Integración Continua II</h2>
+<div class="org-src-container">
+
+<pre  class="src src-yaml"   ><code trim><span style="color: #f6717e;">build-and-package</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">steps</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Clonar repositorio
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Instalar dependencias de producci&#243;n &#250;nicamente
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Instalar SAM CLI
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Compilar aplicaci&#243;n
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Configurar credenciales AWS
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Empaquetar aplicaci&#243;n para testeo y compilar plantilla
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Almacenar plantilla de testeo compilada para el siguiente paso
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">with</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">name</span>: packaged-testing.yaml
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Empaquetar aplicaci&#243;n para producci&#243;n y compilar plantilla
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Almacenar plantilla de producci&#243;n compilada para el siguiente paso
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">with</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">name</span>: packaged-prod.yaml
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org24c5bba">
+<h2 id="org24c5bba">Integración continua: secretos y variables</h2>
+
+<div id="org6ff3428" class="figure">
+<p><img src="./imagenes/secretos.png" alt="secretos.png" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0590933">
+<h2 id="org0590933">Entrega Continua</h2>
+<div class="org-src-container">
+
+<pre  class="src src-yaml"   ><code trim><span style="color: #f6717e;">deploy-testing</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">outputs</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">ApiUrl</span>: ${{ steps.GetUrl.outputs.ApiUrl }}
+<span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">steps</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Instalar SAM CLI
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Obtener plantilla de test almacenada en el paso anterior
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">with</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">name</span>: packaged-testing.yaml
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Configurar credenciales AWS
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Despliegue de aplicaci&#243;n en infraestructura de test
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Obtener URL de la API desplegada para almacenarla en el paso posterior
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org213b279">
+<h2 id="org213b279">Integración Continua III: Tests de integración</h2>
+<div class="org-src-container">
+
+<pre  class="src src-yaml"   ><code trim><span style="color: #f6717e;">integration-test</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">env</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">ApiUrl</span>: ${{needs.deploy-testing.outputs.ApiUrl}}
+<span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">steps</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Clonar repositorio
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Instalar dependencias
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Ejecutar test de integraci&#243;n
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orged21816">
+<h2 id="orged21816">Despliegue en producción</h2>
+<div class="org-src-container">
+
+<pre  class="src src-yaml"   ><code trim><span style="color: #f6717e;">deploy-prod</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">environment</span>: testenv
+<span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">steps</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Instalar SAM CLI
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Obtener plantilla de producci&#243;n almacenada en el paso anterior
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">with</span>:
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> <span style="color: #f6717e;">name</span>: packaged-prod.yaml
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Configurar credenciales AWS
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Despliegue de aplicaci&#243;n en infraestructura de producci&#243;n
+<span style="background-color: #e3e3d3;"> </span> <span style="background-color: #e3e3d3;"> </span> - <span style="color: #f6717e;">name</span>: Borrar infraestructura de test
+</code></pre>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>
