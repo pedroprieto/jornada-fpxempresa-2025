@@ -119,6 +119,7 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
 - No almacenar credenciales en código
 - Utilizar secretos y variables de entorno
 - Herramientas de monitorización
+- Detección automática de vulnerabilidades en dependencias
 - Seguridad preventiva
 - Seguridad paliativa
 
