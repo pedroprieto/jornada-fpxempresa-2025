@@ -464,6 +464,47 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Devops-toolchain-es.sv
       - name: Ejecutar test de integración
 #+end_src
 
+** Fallo en la aplicación
+#+begin_src plantuml :file ./imagenes/falloarquitectura.png :exports results
+      @startuml
+  '!$AWS_DARK = true
+
+  !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v19.0/dist
+  !include AWSPuml/AWSCommon.puml
+
+  !include AWSPuml/AWSSimplified.puml
+
+  !include AWSPuml/General/Users.puml
+  !include AWSPuml/NetworkingContentDelivery/APIGateway.puml
+  !include AWSPuml/Compute/Lambda.puml
+  !include AWSPuml/Database/DynamoDB.puml
+
+  skinparam linetype ortho
+
+    left to right direction
+
+    Users(usuarios, "Usuarios", "")
+    APIGateway(API, "API", "")
+    Lambda(lambda1, "Listado", "")
+    Lambda(lambda2, "Elemento", "")
+    Lambda(lambda3, "Añadir", "")
+    DynamoDB(tabla, "BD", "")
+
+    usuarios --> API
+    API --> lambda1
+    API ..> lambda2
+    API --> lambda3
+    lambda1 --> tabla
+    lambda2 --> tabla
+    lambda3 --> tabla
+
+      @enduml
+#+end_src
+
+#+RESULTS:
+[[./imagenes/falloarquitectura.png]]
+
+
 * Despliegue en producción
 [[./imagenes/cipipeline.png]]
 
