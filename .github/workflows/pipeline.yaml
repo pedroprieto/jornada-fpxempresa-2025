@@ -36,10 +36,6 @@ jobs:
         run: npm install
       - name: Lanzar tests unitarios
         run: npm run test
-      - name: Eliminar carpeta de tests para reducir tamaño
-        run: rm -rf ./__tests__
-      - name: Eliminar dependencias de desarrollo y dejar solo las de producción
-        run: npm prune --production
 
   # Tarea 2: Compilación y empaquetado de la aplicación
   build-and-package:
@@ -48,6 +44,10 @@ jobs:
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v3
+      - name: Eliminar carpeta de tests para reducir tamaño
+        run: rm -rf ./__tests__
+      - name: Instalar dependencias de producción únicamente
+        run: npm prune --production
       - name: Instalar SAM CLI
         uses: aws-actions/setup-sam@v2
         with:
@@ -95,8 +95,6 @@ jobs:
     outputs:
       ApiUrl: ${{ steps.GetUrl.outputs.ApiUrl }}
     steps:
-      - name: Clonar repositorio
-        uses: actions/checkout@v3
       - name: Instalar SAM CLI
         uses: aws-actions/setup-sam@v2
         with:
@@ -143,6 +141,8 @@ jobs:
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v3
+      - name: Instalar dependencias
+        run: npm install
       - run: |
           ApiUrl=$ApiUrl npm run integracion
 
@@ -154,8 +154,6 @@ jobs:
     # https://docs.github.com/en/actions/reference/environments
     environment: testenv
     steps:
-      - name: Clonar repositorio
-        uses: actions/checkout@v3
       - name: Instalar SAM CLI
         uses: aws-actions/setup-sam@v2
         with:
