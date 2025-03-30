@@ -2,7 +2,6 @@ import assert from "node:assert";
 import axios from "axios";
 
 const URL = process.env.ApiUrl;
-console.log(URL);
 
 let d1 = { id: "1", name: "test1" };
 let d2 = { id: "2", name: "test2" };
