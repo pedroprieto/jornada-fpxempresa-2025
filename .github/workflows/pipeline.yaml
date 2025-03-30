@@ -144,7 +144,7 @@ jobs:
       - name: Clonar repositorio
         uses: actions/checkout@v3
       - run: |
-          # trigger the integration tests here
+          ApiUrl=$ApiUrl npm run integracion
 
   # Tarea 5: Despliegue de aplicación en infraestructura de producción
   deploy-prod:

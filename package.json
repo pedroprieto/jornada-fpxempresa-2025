@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
-    "integracion": "ApiUrl=$ApiUrl node integracion/testapi.mjs"
+    "integracion": "node integracion/testapi.mjs"
   },
   "jest": {
     "testMatch": [
